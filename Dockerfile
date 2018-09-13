@@ -1,13 +1,5 @@
 # Based on: https://github.com/testdrivenio/spark-docker-swarm
-FROM debian:jessie
-
-RUN apt-get update \
-  && apt-get install -y curl unzip \
-    python3 python3-setuptools \
-  && ln -s /usr/bin/python3 /usr/bin/python \
-  && easy_install3 pip py4j \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+FROM python:3.6.6-jessie
 
 ENV PYTHONHASHSEED 0
 ENV PYTHONIOENCODING UTF-8
