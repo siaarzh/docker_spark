@@ -1,5 +1,14 @@
 FROM anapsix/alpine-java:8
 
+LABEL name="Apache Spark Docker Swarm Container"
+LABEL version="2.3.1-alpine_w_hadoop"
+LABEL spark_version="2.3.1"
+LABEL python_version="3.6.5"
+LABEL pip_version="18.0"
+LABEL description="This is a light version of an Apache Spark \
+container capable of running in Docker Swarm \
+as a Standalone Spark Cluster."
+
 # PYTHON
 RUN apk add --no-cache python3 && \
   python3 -m ensurepip && \
