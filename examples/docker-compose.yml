@@ -1,0 +1,60 @@
+version: "3.6"
+
+x-deploy:
+  &default-deploy
+  restart_policy:
+    condition: on-failure
+    delay: 5s
+    max_attempts: 3
+    window: 120s
+
+# ============================================================================ #
+
+services:
+  spark_master:
+    image: siaarzh/docker_spark:2.4.0-alpine
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h sparkmaster
+    hostname: sparkmaster
+    environment:
+      MASTER: spark://sparkmaster:7077
+      SPARK_CONF_DIR: /conf
+      SPARK_PUBLIC_DNS: 127.0.0.1
+    # ports:
+    #   - "33021:8080"
+    #   - "33023:8081"
+    #   - "33024:4040"
+    #   - "33025:7077"
+    #   - "33026:6066"
+    networks:
+      backend:
+        aliases:
+          - sparkmaster
+    deploy:
+      << : *default-deploy
+      replicas: 1
+
+  spark_worker:
+    image: siaarzh/docker_spark:2.4.0-alpine
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://sparkmaster:7077
+    hostname: sparkworker
+    environment:
+      SPARK_CONF_DIR: /conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 2g
+      SPARK_PUBLIC_DNS: 127.0.0.1
+    # ports:
+    #   - "33022:8081"
+    networks:
+      backend:
+        aliases:
+          - sparkworker
+    deploy:
+      << : *default-deploy
+      replicas: 2
+    depends_on:
+      - spark_master
+
+networks:
+  backend:
+    driver: overlay
+    attachable: true
