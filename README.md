@@ -8,10 +8,12 @@ A Docker container for Apache Spark. Now lighter on alpine image!
 
 ## Testing
 
-To test the image using a simple Pi Job (a compute-intensive job, where spark basically "throws darts" at a circle), run the following command:
+To test the image using a simple Pi Job, run the following command:
 
 ```bash
 $ bash ./tests/test_Pi.sh
 ```
 
 This will use the `docker-compose.yml` file to launch a standalone local cluster with 1 master node and 2 worker nodes.
+
+> If you wish to understand what the above test does, [here's](https://seeing-theory.brown.edu/frequentist-inference/index.html) a visualization.
